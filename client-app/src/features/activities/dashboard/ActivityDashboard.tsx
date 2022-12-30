@@ -21,7 +21,7 @@ interface Props {
 export default function ActivityDashboard({activities, selectActivity, selectedActivity, deleteActivity,
     cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, submitting}: Props) {
     return (
-        // Grid is oart of semantic UI styling
+        // Grid is part of semantic UI styling
         // width = '10' is the number of columns in the grid
         // Max grid size 16
         // the grid under is 6 to make 16
