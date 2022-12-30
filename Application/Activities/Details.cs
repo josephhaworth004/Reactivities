@@ -20,11 +20,11 @@ namespace Application.Activities
             public Guid Id { get; set;} 
         }
 
-        // Hander Class. Inherites the IRequest Handler
+        // Handler Class. Inherits the IRequest Handler
         // Takes Query as a parma and returns a single Activity
         public class Handler : IRequestHandler<Query, Activity>
         {
-            // Contructor to bring in DataContext needs using persistance
+            // Constructor to bring in DataContext needs using persistance
             private readonly DataContext _context;
             public Handler (DataContext context) {
             _context = context;

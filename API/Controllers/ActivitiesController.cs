@@ -17,7 +17,7 @@ namespace API.Controllers
 
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")] 
         
-        // Register Mediator as a service inside our program calss
+        // Register Mediator as a service inside our program class
         public async Task <ActionResult<Activity>> GetActivity(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});        

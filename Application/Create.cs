@@ -6,21 +6,21 @@ namespace Application
 {
     public class Create
     {
-        // Command does not return anything. We are passing IRequestr
+        // Command does not return anything. We are passing IRequestor
         // This is the difference between a command and a query.
         // Queries return data, commands do not
         public class Command : IRequest {
 
             // Pass an object of type Activity to this handler when we create it
-            // Below is what we want to receive as a paramter from our API
+            // Below is what we want to receive as a parameter from our API
             public Activity Activity { get; set; }
         }
 
-        public class Hander : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command>
         {
             // Constructor injects DataContext so we can persist our changes 
             private readonly DataContext _context;
-            public Hander(DataContext context)
+            public Handler(DataContext context)
             {
                 _context = context;
             }
