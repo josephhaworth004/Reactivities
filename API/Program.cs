@@ -2,37 +2,59 @@ using API.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-var builder = WebApplication.CreateBuilder(args);
+// Below creates a Kestrel Server and reads from config files.
+// Kestrel is the web server that's included and enabled by default in ASP.NET Core project templates.
+var builder = WebApplication.CreateBuilder(args); 
 
 // Add services to the container.
 
+// Services are things used in the application logic. 
+// Services give more functionality to the app logic.
+// Using Dependency Injection to inject these services into other classes in.
+// Will be scoped to the HTTP requests
+// Much of the code that would be here has been placed in AddApplicationServices.cs
 
 builder.Services.AddControllers();
+
+// Much of the code that would be here has been placed in AddApplicationServices.cs
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+// Referred to as "Middleware". Can do things with HTTP requests on their way in or out
+// Ordering is important in middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors("CorsPolicy");
+// CORS = Cross Origin Resource Sharing - for when data coming from different ports
+app.UseCors("CorsPolicy"); // needs adding before UserAuthorization() The browser will check this first
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers(); // Refers to API Controllers
 
-using var scope = app.Services.CreateScope();
+// Create database and auto clean up when finished.
+using var scope = app.Services.CreateScope(); // Create a scope to access a service 
 var services = scope.ServiceProvider;
 
+// dotnet ef for Entity framework. 
+// database: commands to mange the db
+// dbcontext: commands to manage DBContext type
+// migrations: commands to manage migrations
+
+// Get access to our DataContext service specified above
 try
 {
     var context = services.GetRequiredService<Persistence.DataContext>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context);
+    await Seed.SeedData(context); // Seeds the db with the data provided in Seed.cs
+    // await will wait on an async class response
 }
 catch (Exception ex)
 {
@@ -41,3 +63,4 @@ catch (Exception ex)
 }
 
 app.Run();
+

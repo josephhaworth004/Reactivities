@@ -1,20 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain;
 
 namespace Persistence
 {
+    // Create Seed Data
     public class Seed
     {
         // Static Method
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context) // Pass the seed data in
         {
-            if (context.Activities.Any()) return;
+            if (context.Activities.Any()) return; // if the above already done - skip the rest
             
             var activities = new List<Activity>
             {
+                // Sample data
                 new Activity
                 {
                     Title = "Past Activity 1",
@@ -107,8 +105,8 @@ namespace Persistence
                 }
             };
 
-            await context.Activities.AddRangeAsync(activities);
-            await context.SaveChangesAsync();
+            await context.Activities.AddRangeAsync(activities); // Add the activities INTO MEMORY
+            await context.SaveChangesAsync(); // Save to the db
         }
     }
 }

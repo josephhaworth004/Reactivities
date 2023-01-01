@@ -8,7 +8,11 @@ namespace Persistence.Migrations
     /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
-        /// <inheritdoc />
+        // dotnet ef for Entity framework. 
+        // database: commands to mange the db
+        // dbcontext: commands to manage DBContext type
+        // migrations: commands to manage migrations
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
