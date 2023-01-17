@@ -1,4 +1,7 @@
+using Application;
 using Application.Core;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -29,6 +32,8 @@ namespace API.Extensions
             // Param is to tell where handlers are located.
             services.AddMediatR(typeof(Application.Activities.List.Handler));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<Create>();
 
             return services;
         }  
