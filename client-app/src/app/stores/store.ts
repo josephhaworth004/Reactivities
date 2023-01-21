@@ -2,15 +2,18 @@
 
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
+import CommonStore from "./commonStore";
 
 interface Store {
     activityStore: ActivityStore // ActivityStore is a class from activityStore.ts but it can also be a type
+    commonStore: CommonStore;
 }
 
 export const store: Store = { // Export a store of type store
     // Object of type ActivityStore()
     // Returns an object with an activityStore inside.
-    activityStore: new ActivityStore() 
+    activityStore: new ActivityStore(), 
+    commonStore: new CommonStore()
 }
 
 // Create a react context

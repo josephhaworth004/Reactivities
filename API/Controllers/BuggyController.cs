@@ -1,33 +1,28 @@
-/*
-API Controller - BuggyController.cs
-=====
-*/
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class BuggyController : BaseAPIController
     {
-        [HttpGet("not-found")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("not-found")]
         public ActionResult GetNotFound()
         {
             return NotFound();
         }
 
-        [HttpGet("bad-request")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("bad-request")]
         public ActionResult GetBadRequest()
         {
             return BadRequest("This is a bad request");
         }
 
-        [HttpGet("server-error")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("server-error")]
         public ActionResult GetServerError()
         {
             throw new Exception("This is a server error");
         }
 
-        [HttpGet("unauthorised")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("unauthorised")]
         public ActionResult GetUnauthorised()
         {
             return Unauthorized();
