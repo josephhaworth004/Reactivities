@@ -1,7 +1,7 @@
 export interface Activity {
     id: string;
     title: string;
-    date: string; // Came in from json2ts as Date?
+    date: Date | null;
     description: string;
     category: string;
     city: string;
