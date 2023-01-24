@@ -2,6 +2,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.Activities;
 using Application;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -22,6 +23,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query()));
         }
 
+        //[Authorize]
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")] // Route parameter: api/activities/GUID      
         // Register Mediator as a service inside our program class
         public async Task <IActionResult> GetActivity(Guid id)

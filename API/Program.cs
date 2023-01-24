@@ -1,5 +1,9 @@
 using API.Extensions;
 using API.Middleware;
+using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -15,10 +19,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Will be scoped to the HTTP requests
 // Much of the code that would be here has been placed in AddApplicationServices.cs
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 
 // Much of the code that would be here has been placed in AddApplicationServices.cs
 builder.Services.AddApplicationServices(builder.Configuration);
+
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -39,6 +48,7 @@ if (app.Environment.IsDevelopment())
 // CORS = Cross Origin Resource Sharing - for when data coming from different ports
 app.UseCors("CorsPolicy"); // needs adding before UserAuthorization() The browser will check this first
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); // Refers to API Controllers
@@ -56,8 +66,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<Persistence.DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context); // Seeds the db with the data provided in Seed.cs
+    await Seed.SeedData(context, userManager); // Seeds the db with the data provided in Seed.cs
     // await will wait on an async class response
 }
 catch (Exception ex)
