@@ -4,13 +4,29 @@ import { observer } from "mobx-react-lite";
 import { Outlet, useLocation } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import { ToastContainer } from "react-toastify";
+import { useStore } from "../stores/store";
+import { useEffect } from "react";
+import LoadingComponent from "./LoadingComponent";
+import ModalContainer from "../common/modals/ModalContainer";
 
 // Typescript made to look like HTML a .tsx file
 function App() {
 const location = useLocation();
+const { commonStore, userStore } = useStore();
+
+  useEffect(() => {
+    if (commonStore.token) {
+      userStore.getUser().finally(() => commonStore.setAppLoaded())
+    } else {
+      commonStore.setAppLoaded()
+    }
+  }, [commonStore, userStore])
+  
+  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (
     <>
+    <ModalContainer />
     <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
     {location.pathname === '/' ? <HomePage /> : (
       <>
@@ -25,4 +41,4 @@ const location = useLocation();
 }
 
 // Export app within a MObX observer
-export default observer(App); // Observe is a higher order function that will return our app with observer powers
+export default observer(App); 

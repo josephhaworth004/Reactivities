@@ -16,7 +16,7 @@ export default observer(function ActivityDashboard() {
     if (activityRegistry.size <= 1) loadActivities();
   }, [loadActivities]); // These dependencies ensure the axios.get will  be called once. Would be infinite loop otherwise
 
-  if (activityStore.loadingInitial) return <LoadingComponent content="Loading app" />;
+  if (activityStore.loadingInitial) return <LoadingComponent content="Loading activities..." />;
 
     return (
         // Grid is part of semantic UI styling

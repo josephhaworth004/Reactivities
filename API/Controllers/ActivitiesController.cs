@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    // class ActivitiesControl inherits from BaseAPIController
+    [AllowAnonymous]
+ 
     // [ApiController] 
     // [Route("api/[controller]")]
     public class ActivitiesController : BaseAPIController

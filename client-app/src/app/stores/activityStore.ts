@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
 import { v4 as uuid } from "uuid";
-import {format} from 'date-fns';
+import { format } from "date-fns";
 
 export default class ActivityStore {
   // List of activities of type Activity Array = empty array
@@ -18,19 +18,22 @@ export default class ActivityStore {
   }
 
   get activitiesByDate() {
-    return Array.from(this.activityRegistry.values()).sort((a, b) =>
-      a.date!.getTime() - b.date!.getTime());
+    return Array.from(this.activityRegistry.values()).sort(
+      (a, b) => a.date!.getTime() - b.date!.getTime()
+    );
   }
 
   get groupedActivities() {
     return Object.entries(
       this.activitiesByDate.reduce((activities, activity) => {
-        const date = format(activity.date!, 'dd MMM yyyy');
+        const date = format(activity.date!, "dd MMM yyyy");
         // Will get the object in activities that matches the date
-        activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity];
         return activities;
-      }, {} as {[key: string]: Activity[]})
-    )
+      }, {} as { [key: string]: Activity[] })
+    );
   }
 
   // Action called loadActivities
@@ -48,44 +51,42 @@ export default class ActivityStore {
       console.log(error);
       this.setLoadingInitial(false);
     }
-  }
+  };
 
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
     if (activity) {
       this.selectedActivity = activity;
       return activity;
-    }  
-    else {
+    } else {
       this.setLoadingInitial(true);
-      try { 
+      try {
         activity = await agent.Activities.details(id);
         this.setActivity(activity);
-        runInAction (() => this.selectedActivity = activity);
+        runInAction(() => (this.selectedActivity = activity));
         this.setLoadingInitial(false);
         return activity;
       } catch (error) {
         console.log(error);
         this.setLoadingInitial(false);
-      } 
+      }
     }
-  }
+  };
 
   private setActivity = (activity: Activity) => {
     activity.date = new Date(activity.date!);
-    this.activityRegistry.set(activity.id, activity); /// string is id as key, Activity object as value 
-  }
+    this.activityRegistry.set(activity.id, activity); /// string is id as key, Activity object as value
+  };
 
   private getActivity = (id: string) => {
     return this.activityRegistry.get(id);
-  }
+  };
 
   // Make the setting of the loading it's own action
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state;
-  }
+  };
 
-  
   createActivity = async (activity: Activity) => {
     this.loading = true;
     activity.id = uuid();
@@ -103,7 +104,7 @@ export default class ActivityStore {
         this.loading = false;
       });
     }
-  }
+  };
 
   updateActivity = async (activity: Activity) => {
     this.loading = true;
@@ -121,7 +122,7 @@ export default class ActivityStore {
         this.loading = false;
       });
     }
-  }
+  };
 
   deleteActivity = async (id: string) => {
     this.loading = true;
@@ -131,12 +132,12 @@ export default class ActivityStore {
         this.activityRegistry.delete(id);
 
         this.loading = false;
-      })
+      });
     } catch (error) {
       console.log(error);
       runInAction(() => {
         this.loading = false;
-      })
+      });
     }
-  }
+  };
 }
